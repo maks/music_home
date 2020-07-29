@@ -66,29 +66,6 @@ class AlbumUIState extends State<AlbumUI> with SingleTickerProviderStateMixin {
       child: new Stack(
         children: <Widget>[
           myHero,
-          new Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.symmetric(horizontal: 0.8),
-            child: new Material(
-              borderRadius: new BorderRadius.circular(5.0),
-              child: new Stack(children: [
-                new LinearProgressIndicator(
-                    value: 1.0,
-                    valueColor: new AlwaysStoppedAnimation(
-                        Theme.of(context).buttonColor)),
-                new LinearProgressIndicator(
-                  value: widget.position != null &&
-                          widget.position.inMilliseconds > 0
-                      ? (widget.position?.inMilliseconds?.toDouble() ?? 0.0) /
-                          (widget.duration?.inMilliseconds?.toDouble() ?? 0.0)
-                      : 0.0,
-                  valueColor:
-                      new AlwaysStoppedAnimation(Theme.of(context).cardColor),
-                  backgroundColor: Theme.of(context).buttonColor,
-                ),
-              ]),
-            ),
-          ),
         ],
       ),
     );
