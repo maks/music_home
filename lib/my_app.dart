@@ -21,6 +21,7 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
   ]);
+  SystemChrome.setEnabledSystemUIOverlays([]);
 
     initPlatformState();
   }
