@@ -35,8 +35,6 @@ class _MyAppState extends State<MyApp> {
     } catch (e) {
       print("Failed to get songs: '${e.message}'.");
     }
-
-    print('Songs list: $songs');
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flute_example/data/song_data.dart';
 import 'package:flute_example/widgets/mp_album_ui.dart';
 import 'package:flute_example/widgets/mp_blur_filter.dart';
@@ -36,11 +35,18 @@ class _NowPlayingState extends State<NowPlaying> {
       position != null ? position.toString().split('.').first : '';
 
   bool isMuted = false;
+  bool smallScreen = false;
 
   @override
   initState() {
     super.initState();
     initPlayer();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    smallScreen = MediaQuery.of(context).size.height <= 480;
   }
 
   @override
@@ -141,21 +147,23 @@ class _NowPlayingState extends State<NowPlaying> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenSizeOffset = smallScreen ? 2 : 20;
+
     Widget _buildPlayer() => new Container(
-        padding: new EdgeInsets.all(20.0),
+        padding: new EdgeInsets.all(screenSizeOffset * 3),
         child: new Column(mainAxisSize: MainAxisSize.min, children: [
           new Column(
             children: <Widget>[
               new Text(
                 song.title,
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline6,
               ),
               new Text(
                 song.artist,
                 style: Theme.of(context).textTheme.caption,
               ),
               new Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
+                padding: EdgeInsets.only(bottom: 1),
               )
             ],
           ),
@@ -179,10 +187,10 @@ class _NowPlayingState extends State<NowPlaying> {
                     ? "${positionText ?? ''} / ${durationText ?? ''}"
                     : duration != null ? durationText : '',
                 // ignore: conflicting_dart_import
-                style: new TextStyle(fontSize: 24.0))
+                style: Theme.of(context).textTheme.caption)
           ]),
           new Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+            padding: EdgeInsets.only(bottom: screenSizeOffset),
           ),
           new Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -224,9 +232,10 @@ class _NowPlayingState extends State<NowPlaying> {
 
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Now Playing"),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
       ),
+      extendBodyBehindAppBar: true,
       body: new Container(
         color: Theme.of(context).backgroundColor,
         child: new Stack(
