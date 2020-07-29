@@ -157,10 +157,12 @@ class _NowPlayingState extends State<NowPlaying> {
               new Text(
                 song.title,
                 style: Theme.of(context).textTheme.headline6,
+                overflow: TextOverflow.ellipsis,
               ),
               new Text(
                 song.artist,
                 style: Theme.of(context).textTheme.caption,
+                overflow: TextOverflow.ellipsis,
               ),
               new Padding(
                 padding: EdgeInsets.only(bottom: 1),
