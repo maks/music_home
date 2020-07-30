@@ -1,16 +1,14 @@
 # music_home
 
-A new Flutter project.
+A simple Android music player in Flutter.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+* nice fullscreen music player UI
+* uses the devices system MediaStore for list of music files
+* works on device screens as small as 480x320
+* is a "home" or "launcher" app, so can be made to be default launcher
 
-A few resources to get you started if this is your first Flutter project:
+## Acknowledgements
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+My thanks to Pawan Kumar as this is basically his [Flutter-Music-Player app](https://github.com/iampawan/Flutter-Music-Player) with customisations and fixes to work on older, smaller screen Android phones and additional functionality to be a home app, to use in turning a Android phone into a basic DAP (digital audio player), minus the high-end audio hardware of course.
