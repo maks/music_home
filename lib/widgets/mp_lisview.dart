@@ -12,7 +12,7 @@ class MPListView extends StatelessWidget {
     final rootIW = MPInheritedWidget.of(context);
     SongData songData = rootIW.songData;
     return new ListView.builder(
-      itemCount: songData.songs.length,
+      itemCount: songData.songs?.length ?? 0,
       itemBuilder: (context, int index) {
         var s = songData.songs[index];
         final MaterialColor color = _colors[index % _colors.length];
