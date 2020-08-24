@@ -1,11 +1,13 @@
 import 'dart:async';
-import 'package:flute_example/data/song_data.dart';
-import 'package:flute_example/widgets/mp_album_ui.dart';
-import 'package:flute_example/widgets/mp_blur_filter.dart';
-import 'package:flute_example/widgets/mp_blur_widget.dart';
-import 'package:flute_example/widgets/mp_control_button.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flute_music_player/flute_music_player.dart';
+import 'package:flutter/material.dart';
+
+import '../data/song_data.dart';
+import '../widgets/mp_album_ui.dart';
+import '../widgets/mp_blur_filter.dart';
+import '../widgets/mp_blur_widget.dart';
+import '../widgets/mp_control_button.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -16,7 +18,7 @@ class NowPlaying extends StatefulWidget {
   NowPlaying(this.songData, this._song, {this.nowPlayTap});
 
   @override
-  _NowPlayingState createState() => new _NowPlayingState();
+  _NowPlayingState createState() => _NowPlayingState();
 }
 
 class _NowPlayingState extends State<NowPlaying> {
@@ -26,12 +28,12 @@ class _NowPlayingState extends State<NowPlaying> {
   PlayerState playerState;
   Song song;
 
-  get isPlaying => playerState == PlayerState.playing;
-  get isPaused => playerState == PlayerState.paused;
+  bool get isPlaying => playerState == PlayerState.playing;
+  bool get isPaused => playerState == PlayerState.paused;
 
-  get durationText =>
+  String get durationText =>
       duration != null ? duration.toString().split('.').first : '';
-  get positionText =>
+  String get positionText =>
       position != null ? position.toString().split('.').first : '';
 
   bool isMuted = false;
@@ -52,6 +54,7 @@ class _NowPlayingState extends State<NowPlaying> {
   @override
   void dispose() {
     super.dispose();
+    _clearHandlers();
   }
 
   void onComplete() {
@@ -59,7 +62,7 @@ class _NowPlayingState extends State<NowPlaying> {
     play(widget.songData.nextSong);
   }
 
-  initPlayer() async {
+  void initPlayer() async {
     if (audioPlayer == null) {
       audioPlayer = widget.songData.audioPlayer;
     }
@@ -71,11 +74,8 @@ class _NowPlayingState extends State<NowPlaying> {
         }
       }
       play(song);
-      //  else {
-      //   widget._song;
-      //   playerState = PlayerState.playing;
-      // }
     });
+
     audioPlayer.setDurationHandler((d) => setState(() {
           duration = d;
         }));
@@ -94,35 +94,39 @@ class _NowPlayingState extends State<NowPlaying> {
     audioPlayer.setErrorHandler((msg) {
       setState(() {
         playerState = PlayerState.stopped;
-        duration = new Duration(seconds: 0);
-        position = new Duration(seconds: 0);
+        duration = Duration(seconds: 0);
+        position = Duration(seconds: 0);
       });
     });
   }
 
   Future play(Song s) async {
     if (s != null) {
-      final result = await audioPlayer.play(s.uri, isLocal: true);
-      if (result == 1)
+      final int result = await audioPlayer.play(s.uri, isLocal: true) as int;
+      if (result == 1) {
         setState(() {
           playerState = PlayerState.playing;
           song = s;
         });
+      }
     }
   }
 
   Future pause() async {
-    final result = await audioPlayer.pause();
-    if (result == 1) setState(() => playerState = PlayerState.paused);
+    final int result = await audioPlayer.pause() as int;
+    if (result == 1) {
+      setState(() => playerState = PlayerState.paused);
+    }
   }
 
   Future stop() async {
-    final result = await audioPlayer.stop();
-    if (result == 1)
+    final int result = await audioPlayer.stop() as int;
+    if (result == 1) {
       setState(() {
         playerState = PlayerState.stopped;
-        position = new Duration();
+        position = Duration();
       });
+    }
   }
 
   Future next(SongData s) async {
@@ -138,113 +142,114 @@ class _NowPlayingState extends State<NowPlaying> {
   }
 
   Future mute(bool muted) async {
-    final result = await audioPlayer.mute(muted);
-    if (result == 1)
+    final int result = await audioPlayer.mute(muted) as int;
+    if (result == 1) {
       setState(() {
         isMuted = muted;
       });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final double screenSizeOffset = smallScreen ? 2 : 20;
 
-    Widget _buildPlayer() => new Container(
-        padding: new EdgeInsets.all(screenSizeOffset * 3),
-        child: new Column(mainAxisSize: MainAxisSize.min, children: [
-          new Column(
+    Widget _buildPlayer() => Container(
+        padding: EdgeInsets.all(screenSizeOffset * 3),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Column(
             children: <Widget>[
-              new Text(
+              Text(
                 song.title,
                 style: Theme.of(context).textTheme.headline6,
                 overflow: TextOverflow.ellipsis,
               ),
-              new Text(
+              Text(
                 song.artist,
                 style: Theme.of(context).textTheme.caption,
                 overflow: TextOverflow.ellipsis,
               ),
-              new Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 1),
               )
             ],
           ),
-          new Row(mainAxisSize: MainAxisSize.min, children: [
-            new ControlButton(Icons.skip_previous, () => prev(widget.songData)),
-            new ControlButton(isPlaying ? Icons.pause : Icons.play_arrow,
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            ControlButton(Icons.skip_previous, () => prev(widget.songData)),
+            ControlButton(isPlaying ? Icons.pause : Icons.play_arrow,
                 isPlaying ? () => pause() : () => play(widget._song)),
-            new ControlButton(Icons.skip_next, () => next(widget.songData)),
+            ControlButton(Icons.skip_next, () => next(widget.songData)),
           ]),
           duration == null
-              ? new Container()
-              : new Slider(
+              ? Container()
+              : Slider(
                   value: position?.inMilliseconds?.toDouble() ?? 0,
                   onChanged: (double value) =>
                       audioPlayer.seek((value / 1000).roundToDouble()),
                   min: 0.0,
                   max: duration.inMilliseconds.toDouble()),
-          new Row(mainAxisSize: MainAxisSize.min, children: [
-            new Text(
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            Text(
                 position != null
                     ? "${positionText ?? ''} / ${durationText ?? ''}"
                     : duration != null ? durationText : '',
                 // ignore: conflicting_dart_import
                 style: Theme.of(context).textTheme.caption)
           ]),
-          new Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: screenSizeOffset),
           ),
-          new Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              new IconButton(
+              IconButton(
                   icon: isMuted
-                      ? new Icon(
+                      ? Icon(
                           Icons.headset,
                           color: Theme.of(context).unselectedWidgetColor,
                         )
-                      : new Icon(Icons.headset_off,
+                      : Icon(Icons.headset_off,
                           color: Theme.of(context).unselectedWidgetColor),
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
                     mute(!isMuted);
                   }),
-              // new IconButton(
-              //     onPressed: () => mute(true),
-              //     icon: new Icon(Icons.headset_off),
-              //     color: Colors.cyan),
-              // new IconButton(
-              //     onPressed: () => mute(false),
-              //     icon: new Icon(Icons.headset),
-              //     color: Colors.cyan),
             ],
           ),
         ]));
 
-    var playerUI = new Column(
+    final playerUI = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          new AlbumUI(song, duration, position),
-          new Material(
+          AlbumUI(song, duration, position),
+          Material(
             child: _buildPlayer(),
             color: Colors.transparent,
           ),
         ]);
 
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
       extendBodyBehindAppBar: true,
-      body: new Container(
+      body: Container(
         color: Theme.of(context).backgroundColor,
-        child: new Stack(
+        child: Stack(
           fit: StackFit.expand,
           children: <Widget>[blurWidget(song), blurFilter(), playerUI],
         ),
       ),
     );
+  }
+
+  void _clearHandlers() {
+    audioPlayer.setDurationHandler(null);
+    audioPlayer.setPositionHandler(null);
+    audioPlayer.setStartHandler(null);
+    audioPlayer.setCompletionHandler(null);
+    audioPlayer.setErrorHandler(null);
   }
 }
