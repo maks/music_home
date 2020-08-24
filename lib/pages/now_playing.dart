@@ -54,6 +54,7 @@ class _NowPlayingState extends State<NowPlaying> {
   @override
   void dispose() {
     super.dispose();
+    _clearHandlers();
   }
 
   void onComplete() {
@@ -242,5 +243,13 @@ class _NowPlayingState extends State<NowPlaying> {
         ),
       ),
     );
+  }
+
+  void _clearHandlers() {
+    audioPlayer.setDurationHandler(null);
+    audioPlayer.setPositionHandler(null);
+    audioPlayer.setStartHandler(null);
+    audioPlayer.setCompletionHandler(null);
+    audioPlayer.setErrorHandler(null);
   }
 }
