@@ -9,11 +9,10 @@ class MPInheritedWidget extends InheritedWidget {
       : super(child: child);
 
   static MPInheritedWidget of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(MPInheritedWidget);
+    return context.dependOnInheritedWidgetOfExactType<MPInheritedWidget>();
   }
 
   @override
   bool updateShouldNotify(MPInheritedWidget oldWidget) =>
-      // TODO: implement updateShouldNotify
       songData != oldWidget.songData || isLoading != oldWidget.isLoading;
 }
