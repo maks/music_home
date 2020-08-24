@@ -8,6 +8,7 @@ A simple Android music player in Flutter.
 * uses the devices system MediaStore for list of music files
 * works on device screens as small as 480x320
 * is a "home" or "launcher" app, so can be made to be default launcher
+* disables the screenlock (aka keyguard) if the devices screenlock setting is *not* pin or password
 
 ## Acknowledgements
 
