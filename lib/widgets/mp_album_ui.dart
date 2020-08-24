@@ -20,8 +20,8 @@ class AlbumUIState extends State<AlbumUI> with SingleTickerProviderStateMixin {
   @override
   initState() {
     super.initState();
-    animationController = new AnimationController(
-        vsync: this, duration: new Duration(seconds: 1));
+    animationController =
+        new AnimationController(duration: new Duration(seconds: 1));
     animation = new CurvedAnimation(
         parent: animationController, curve: Curves.elasticOut);
     animation.addListener(() => this.setState(() {}));
