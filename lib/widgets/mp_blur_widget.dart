@@ -17,7 +17,7 @@ Widget blurWidget(Song song) {
               colorBlendMode: BlendMode.darken,
             )
           : new Image(
-              image: new AssetImage("assets/lady.jpeg"),
+              image: new AssetImage("assets/music_record.jpeg"),
               color: Colors.black54,
               fit: BoxFit.cover,
               colorBlendMode: BlendMode.darken,
