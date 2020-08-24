@@ -1,8 +1,9 @@
-import 'package:flute_example/pages/now_playing.dart';
-import 'package:flute_example/widgets/mp_inherited.dart';
-import 'package:flute_example/widgets/mp_lisview.dart';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/mp_inherited.dart';
+import '../widgets/mp_lisview.dart';
+import 'now_playing.dart';
 
 class RootPage extends StatelessWidget {
   @override
@@ -12,8 +13,8 @@ class RootPage extends StatelessWidget {
     void goToNowPlaying(Song s, {bool nowPlayTap: false}) {
       Navigator.push(
           context,
-          new MaterialPageRoute(
-              builder: (context) => new NowPlaying(
+          MaterialPageRoute(
+              builder: (context) => NowPlaying(
                     rootIW.songData,
                     s,
                     nowPlayTap: nowPlayTap,
@@ -25,15 +26,15 @@ class RootPage extends StatelessWidget {
       goToNowPlaying(rootIW.songData.randomSong);
     }
 
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Flutter Music Player"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Music Player'),
         actions: <Widget>[
-          new Container(
+          Container(
             padding: const EdgeInsets.all(20.0),
-            child: new Center(
-              child: new InkWell(
-                  child: new Text("Now Playing"),
+            child: Center(
+              child: InkWell(
+                  child: Text('Now Playing'),
                   onTap: () => goToNowPlaying(
                         rootIW.songData.songs[
                             (rootIW.songData.currentIndex == null ||
@@ -46,12 +47,12 @@ class RootPage extends StatelessWidget {
           )
         ],
       ),
-      // drawer: new MPDrawer(),
+      // drawer: MPDrawer(),
       body: rootIW.isLoading
-          ? new Center(child: new CircularProgressIndicator())
-          : new Scrollbar(child: new MPListView()),
-      floatingActionButton: new FloatingActionButton(
-          child: new Icon(Icons.shuffle), onPressed: () => shuffleSongs()),
+          ? Center(child: CircularProgressIndicator())
+          : Scrollbar(child: MPListView()),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.shuffle), onPressed: () => shuffleSongs()),
     );
   }
 }

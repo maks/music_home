@@ -1,13 +1,14 @@
-import 'package:flute_example/data/song_data.dart';
-import 'package:flute_example/pages/root_page.dart';
-import 'package:flute_example/widgets/mp_inherited.dart';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'data/song_data.dart';
+import 'pages/root_page.dart';
+import 'widgets/mp_inherited.dart';
+
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -20,8 +21,8 @@ class _MyAppState extends State<MyApp> {
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-  ]);
-  SystemChrome.setEnabledSystemUIOverlays([]);
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     initPlatformState();
   }
@@ -33,28 +34,30 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
+  void initPlatformState() async {
     _isLoading = true;
 
-    var songs;
+    List<Song> songs;
     try {
-      songs = await MusicFinder.allSongs();
+      songs = await MusicFinder.allSongs() as List<Song>;
     } catch (e) {
-      print("Failed to get songs: '${e.message}'.");
+      print("Failed to get songs: '$e'.");
     }
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     setState(() {
-      songData = new SongData((songs));
+      songData = SongData(songs);
       _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new MPInheritedWidget(songData, _isLoading, new RootPage());
+    return MPInheritedWidget(songData, _isLoading, RootPage());
   }
 }

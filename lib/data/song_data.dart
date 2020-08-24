@@ -1,19 +1,20 @@
-import 'package:flute_music_player/flute_music_player.dart';
 import 'dart:math';
 
+import 'package:flute_music_player/flute_music_player.dart';
+
 class SongData {
-  List<Song> _songs;
+  final List<Song> _songs;
   int _currentSongIndex = -1;
   MusicFinder musicFinder;
   SongData(this._songs) {
-    musicFinder = new MusicFinder();
+    musicFinder = MusicFinder();
   }
 
   List<Song> get songs => _songs;
   int get length => _songs.length;
   int get songNumber => _currentSongIndex + 1;
 
-  setCurrentIndex(int index) {
+  void setCurrentIndex(int index) {
     _currentSongIndex = index;
   }
 
@@ -23,12 +24,14 @@ class SongData {
     if (_currentSongIndex < length) {
       _currentSongIndex++;
     }
-    if (_currentSongIndex >= length) return null;
+    if (_currentSongIndex >= length) {
+      return null;
+    }
     return _songs[_currentSongIndex];
   }
 
   Song get randomSong {
-    Random r = new Random();
+    final r = Random();
     return _songs[r.nextInt(_songs.length)];
   }
 
@@ -36,7 +39,9 @@ class SongData {
     if (_currentSongIndex > 0) {
       _currentSongIndex--;
     }
-    if (_currentSongIndex < 0) return null;
+    if (_currentSongIndex < 0) {
+      return null;
+    }
     return _songs[_currentSongIndex];
   }
 

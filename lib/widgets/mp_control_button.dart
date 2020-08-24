@@ -8,10 +8,10 @@ class ControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new IconButton(
+    return IconButton(
       onPressed: _onTap,
       iconSize: 50.0,
-      icon: new Icon(iconData),
+      icon: Icon(iconData),
       color: Theme.of(context).buttonColor,
     );
   }
