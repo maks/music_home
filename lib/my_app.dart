@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     setState(() {
-      songData = SongData(songs);
+      songData = SongData(songs, MusicFinder());
       _isLoading = false;
     });
   }
