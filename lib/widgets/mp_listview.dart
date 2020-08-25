@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:music_home/pages/album_tracklist.dart';
 import 'package:music_home/widgets/song_list_tile.dart';
 
 import '../data/song_data.dart';
@@ -33,7 +34,14 @@ class MPListView extends StatelessWidget {
           onSelected: () {
             data.setCurrentIndex(index);
             if (albums) {
-              throw UnimplementedError();
+              final Album album = item as Album;
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AlbumTrackList(data: data, album: album),
+                ),
+              );
             } else {
               final Track track = item as Track;
               Navigator.push<void>(
