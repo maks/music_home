@@ -58,6 +58,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MPInheritedWidget(songData, _isLoading, RootPage());
+    return MPInheritedWidget(
+      songData,
+      _isLoading,
+      RootPage(),
+    );
   }
 }

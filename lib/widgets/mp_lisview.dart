@@ -35,9 +35,11 @@ class MPListView extends StatelessWidget {
           onTap: () {
             songData.setCurrentIndex(index);
             Navigator.push<void>(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NowPlaying(songData, s)));
+              context,
+              MaterialPageRoute(
+                builder: (context) => NowPlaying(songData, s),
+              ),
+            );
           },
         );
       },
