@@ -28,33 +28,46 @@ class RootPage extends StatelessWidget {
       goToNowPlaying(rootIW.songData.randomSong);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Music Player'),
-        actions: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: InkWell(
-                  child: Text('Now Playing'),
-                  onTap: () => goToNowPlaying(
-                        rootIW.songData.songs[
-                            (rootIW.songData.currentIndex == null ||
-                                    rootIW.songData.currentIndex < 0)
-                                ? 0
-                                : rootIW.songData.currentIndex],
-                        nowPlayTap: true,
-                      )),
-            ),
-          )
-        ],
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Music Player'),
+          actions: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: InkWell(
+                    child: Text('Now Playing'),
+                    onTap: () => goToNowPlaying(
+                          rootIW.songData.songs[
+                              (rootIW.songData.currentIndex == null ||
+                                      rootIW.songData.currentIndex < 0)
+                                  ? 0
+                                  : rootIW.songData.currentIndex],
+                          nowPlayTap: true,
+                        )),
+              ),
+            )
+          ],
+          bottom: TabBar(tabs: [
+            Tab(text: 'All Songs'),
+            Tab(text: 'Albums'),
+          ]),
+        ),
+        body: TabBarView(
+          children: [
+            rootIW.isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Scrollbar(child: MPListView()),
+            rootIW.isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Scrollbar(child: MPListView()),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.shuffle), onPressed: () => shuffleSongs()),
       ),
-      // drawer: MPDrawer(),
-      body: rootIW.isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Scrollbar(child: MPListView()),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.shuffle), onPressed: () => shuffleSongs()),
     );
   }
 }
