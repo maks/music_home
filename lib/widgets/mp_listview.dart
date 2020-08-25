@@ -21,13 +21,9 @@ class MPListView extends StatelessWidget {
       itemBuilder: (context, int index) {
         final MusicItem item = items[index];
 
-        File artFile;
-        if (albums) {
-        } else {
-          artFile = ((item as Track).albumArt == null)
-              ? null
-              : File.fromUri(Uri.parse((item as Track).albumArt));
-        }
+        final File artFile = (item.albumArt == null)
+            ? null
+            : File.fromUri(Uri.parse(item.albumArt));
 
         return SongListTile(
           artFile: artFile,

@@ -14,7 +14,8 @@ class MusicData {
   List<Track> get songs => _songs;
 
   List<Album> get albums => _songs
-      .map((song) => Album(song.albumId, song.album, song.artist))
+      .map(
+          (song) => Album(song.albumId, song.album, song.artist, song.albumArt))
       .toList()
       .distinct();
 
@@ -59,6 +60,7 @@ abstract class MusicItem {
   int get id;
   String get title;
   String get artist;
+  String get albumArt;
 }
 
 class Album implements MusicItem {
@@ -68,8 +70,10 @@ class Album implements MusicItem {
   final String title;
   @override
   final String artist;
+  @override
+  final String albumArt;
 
-  Album(this.id, this.title, this.artist);
+  Album(this.id, this.title, this.artist, this.albumArt);
 
   @override
   bool operator ==(Object o) {
@@ -91,11 +95,12 @@ class Track implements MusicItem {
   final String artist;
   @override
   final String title;
+  @override
+  final String albumArt;
   final String album;
   final int albumId;
   final int duration;
   final String uri;
-  final String albumArt;
   final int trackId;
 
   Track(this.id, this.artist, this.title, this.album, this.albumId,
