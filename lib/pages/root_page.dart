@@ -1,8 +1,8 @@
-import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
+import 'package:music_home/data/song_data.dart';
 
 import '../widgets/mp_inherited.dart';
-import '../widgets/mp_lisview.dart';
+import '../widgets/mp_listview.dart';
 import 'now_playing.dart';
 
 class RootPage extends StatelessWidget {
@@ -10,7 +10,7 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final rootIW = MPInheritedWidget.of(context);
     //Goto Now Playing Page
-    void goToNowPlaying(Song s, {bool nowPlayTap: false}) {
+    void goToNowPlaying(Track s, {bool nowPlayTap: false}) {
       Navigator.push(
         context,
         MaterialPageRoute<void>(
@@ -59,10 +59,10 @@ class RootPage extends StatelessWidget {
           children: [
             rootIW.isLoading
                 ? Center(child: CircularProgressIndicator())
-                : Scrollbar(child: MPListView()),
+                : Scrollbar(child: MPListView(rootIW.songData, false)),
             rootIW.isLoading
                 ? Center(child: CircularProgressIndicator())
-                : Scrollbar(child: MPListView()),
+                : Scrollbar(child: MPListView(rootIW.songData, true)),
           ],
         ),
         floatingActionButton: FloatingActionButton(

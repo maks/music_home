@@ -12,8 +12,8 @@ import '../widgets/mp_control_button.dart';
 enum PlayerState { stopped, playing, paused }
 
 class NowPlaying extends StatefulWidget {
-  final Song _song;
-  final SongData songData;
+  final Track _song;
+  final MusicData songData;
   final bool nowPlayTap;
   NowPlaying(this.songData, this._song, {this.nowPlayTap});
 
@@ -26,7 +26,7 @@ class _NowPlayingState extends State<NowPlaying> {
   Duration duration;
   Duration position;
   PlayerState playerState;
-  Song song;
+  Track song;
 
   bool get isPlaying => playerState == PlayerState.playing;
   bool get isPaused => playerState == PlayerState.paused;
@@ -100,7 +100,7 @@ class _NowPlayingState extends State<NowPlaying> {
     });
   }
 
-  Future play(Song s) async {
+  Future play(Track s) async {
     if (s != null) {
       final int result = await audioPlayer.play(s.uri, isLocal: true) as int;
       if (result == 1) {
@@ -129,14 +129,14 @@ class _NowPlayingState extends State<NowPlaying> {
     }
   }
 
-  Future next(SongData s) async {
+  Future next(MusicData s) async {
     stop();
     setState(() {
       play(s.nextSong);
     });
   }
 
-  Future prev(SongData s) async {
+  Future prev(MusicData s) async {
     stop();
     play(s.prevSong);
   }

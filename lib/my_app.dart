@@ -7,12 +7,15 @@ import 'pages/root_page.dart';
 import 'widgets/mp_inherited.dart';
 
 class MyApp extends StatefulWidget {
+  static MaterialColor randomPrimaryColor(int index) =>
+      Colors.primaries[index % Colors.primaries.length];
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  SongData songData;
+  MusicData songData;
   bool _isLoading = true;
 
   @override
@@ -37,9 +40,11 @@ class _MyAppState extends State<MyApp> {
   void initPlatformState() async {
     _isLoading = true;
 
-    List<Song> songs;
+    List<Track> songs;
     try {
-      songs = await MusicFinder.allSongs() as List<Song>;
+      songs = (await MusicFinder.allSongs() as List<Song>)
+          .map((s) => Track.fromSong(s))
+          .toList();
     } catch (e) {
       print("Failed to get songs: '$e'.");
     }
@@ -51,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     setState(() {
-      songData = SongData(songs, MusicFinder());
+      songData = MusicData(songs, MusicFinder());
       _isLoading = false;
     });
   }

@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
+import 'package:music_home/data/song_data.dart';
 
-Widget blurWidget(Song song) {
+Widget blurWidget(Track track) {
   final f =
-      song.albumArt == null ? null : File.fromUri(Uri.parse(song.albumArt));
+      track.albumArt == null ? null : File.fromUri(Uri.parse(track.albumArt));
   return Hero(
-    tag: song.artist,
+    tag: track.artist,
     child: Container(
       child: f != null
           // ignore: conflicting_dart_import

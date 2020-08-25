@@ -6,12 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('albums match song list data', () {
     final songs = [
-      Song.fromMap(<String, dynamic>{'albumId': 1}),
-      Song.fromMap(<String, dynamic>{'albumId': 2}),
-      Song.fromMap(<String, dynamic>{'albumId': 1}),
+      Track.fromSong(Song.fromMap(<String, dynamic>{'albumId': 1})),
+      Track.fromSong(Song.fromMap(<String, dynamic>{'albumId': 2})),
+      Track.fromSong(Song.fromMap(<String, dynamic>{'albumId': 1})),
     ];
 
-    final data = SongData(songs, MockMusicFinder());
+    final data = MusicData(songs, MockMusicFinder());
 
     expect(data.albums.length, 2);
   });

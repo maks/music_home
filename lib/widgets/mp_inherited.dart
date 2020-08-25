@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/song_data.dart';
 
 class MPInheritedWidget extends InheritedWidget {
-  final SongData songData;
+  final MusicData songData;
   final bool isLoading;
 
   const MPInheritedWidget(this.songData, this.isLoading, Widget child)

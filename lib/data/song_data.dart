@@ -4,17 +4,19 @@ import 'package:flute_music_player/flute_music_player.dart';
 
 import '../extensions.dart';
 
-class SongData {
-  final List<Song> _songs;
+class MusicData {
+  final List<Track> _songs;
   int _currentSongIndex = -1;
   final MusicFinder musicFinder;
 
-  SongData(this._songs, this.musicFinder);
+  MusicData(this._songs, this.musicFinder);
 
-  List<Song> get songs => _songs;
+  List<Track> get songs => _songs;
 
-  List<Album> get albums =>
-      _songs.map((song) => Album(song.albumId, song.album)).toList().distinct();
+  List<Album> get albums => _songs
+      .map((song) => Album(song.albumId, song.album, song.artist))
+      .toList()
+      .distinct();
 
   int get length => _songs.length;
   int get songNumber => _currentSongIndex + 1;
@@ -25,7 +27,7 @@ class SongData {
 
   int get currentIndex => _currentSongIndex;
 
-  Song get nextSong {
+  Track get nextSong {
     if (_currentSongIndex < length) {
       _currentSongIndex++;
     }
@@ -35,12 +37,12 @@ class SongData {
     return _songs[_currentSongIndex];
   }
 
-  Song get randomSong {
+  Track get randomSong {
     final r = Random();
     return _songs[r.nextInt(_songs.length)];
   }
 
-  Song get prevSong {
+  Track get prevSong {
     if (_currentSongIndex > 0) {
       _currentSongIndex--;
     }
@@ -53,11 +55,21 @@ class SongData {
   MusicFinder get audioPlayer => musicFinder;
 }
 
-class Album {
-  final int id;
-  final String name;
+abstract class MusicItem {
+  int get id;
+  String get title;
+  String get artist;
+}
 
-  Album(this.id, this.name);
+class Album implements MusicItem {
+  @override
+  final int id;
+  @override
+  final String title;
+  @override
+  final String artist;
+
+  Album(this.id, this.title, this.artist);
 
   @override
   bool operator ==(Object o) {
@@ -65,9 +77,41 @@ class Album {
       return true;
     }
 
-    return o is Album && o.id == id;
+    return o is Album && o.title == title;
   }
 
   @override
   int get hashCode => id.hashCode;
+}
+
+class Track implements MusicItem {
+  @override
+  final int id;
+  @override
+  final String artist;
+  @override
+  final String title;
+  final String album;
+  final int albumId;
+  final int duration;
+  final String uri;
+  final String albumArt;
+  final int trackId;
+
+  Track(this.id, this.artist, this.title, this.album, this.albumId,
+      this.duration, this.uri, this.albumArt, this.trackId);
+
+  factory Track.fromSong(Song s) {
+    return Track(
+      s.id,
+      s.artist,
+      s.title,
+      s.album,
+      s.albumId,
+      s.duration,
+      s.uri,
+      s.albumArt,
+      s.trackId,
+    );
+  }
 }
