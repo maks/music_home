@@ -13,7 +13,7 @@ class RootPage extends StatelessWidget {
     void goToNowPlaying(Song s, {bool nowPlayTap: false}) {
       Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
               builder: (context) => NowPlaying(
                     rootIW.songData,
                     s,
