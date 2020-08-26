@@ -40,11 +40,7 @@ class RootPage extends StatelessWidget {
                 child: InkWell(
                     child: Text('Now Playing'),
                     onTap: () => goToNowPlaying(
-                          rootIW.songData.songs[
-                              (rootIW.songData.currentIndex == null ||
-                                      rootIW.songData.currentIndex < 0)
-                                  ? 0
-                                  : rootIW.songData.currentIndex],
+                          rootIW.songData.currentlyPlayingTrack,
                           nowPlayTap: true,
                         )),
               ),

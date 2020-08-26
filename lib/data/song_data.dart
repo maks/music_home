@@ -5,34 +5,67 @@ import 'package:flute_music_player/flute_music_player.dart';
 class MusicData {
   final List<Track> _tracks;
   final List<Album> _albums = [];
-  int _currentSongIndex = -1;
+  int _currentTrackIndex = -1;
+  int _currentAlbumIndex = -1;
+  int _currentAlbumTrackIndex = 0;
   final MusicFinder musicFinder;
 
   MusicData(this._tracks, this.musicFinder) {
     _mapAlbums();
   }
 
-  List<Track> get songs => _tracks;
+  List<Track> get tracks => _tracks;
 
   List<Album> get albums => _albums;
 
   int get length => _tracks.length;
-  int get songNumber => _currentSongIndex + 1;
+  int get songNumber => _currentTrackIndex + 1;
 
-  void setCurrentIndex(int index) {
-    _currentSongIndex = index;
+  Album get currentAlbum => _albums[_currentAlbumIndex];
+
+  bool get isPlayingAlbum => _currentAlbumIndex != -1;
+
+  Track get _currentAlbumTrack => currentAlbum.tracks[_currentAlbumTrackIndex];
+
+  Track get currentlyPlayingTrack =>
+      isPlayingAlbum ? _currentAlbumTrack : _tracks[_currentTrackIndex];
+
+  void setCurrentTrackIndex(int index) {
+    _currentTrackIndex = index;
+    // clear current album when starting to play new track from all tracks list
+    _currentAlbumIndex = -1;
   }
 
-  int get currentIndex => _currentSongIndex;
+  void setCurrentAlbumIndex(int index) {
+    _currentAlbumIndex = index;
+    // reset back to 1st album track each time we change album
+    _currentAlbumTrackIndex = 0;
+  }
+
+  void setCurrentAlbumTrackIndex(int albumTrackIndex) {
+    _currentAlbumTrackIndex = albumTrackIndex;
+  }
+
+  int get currentIndex => _currentTrackIndex;
 
   Track get nextSong {
-    if (_currentSongIndex < length) {
-      _currentSongIndex++;
+    if (_currentAlbumIndex != -1) {
+      if (_currentAlbumTrackIndex < currentAlbum.tracks.length) {
+        _currentAlbumTrackIndex++;
+      }
+      if (_currentAlbumTrackIndex >= currentAlbum.tracks.length) {
+        return null;
+      }
+      return currentAlbum.tracks[_currentAlbumTrackIndex];
+    } else {
+      if (_currentTrackIndex < length) {
+        _currentTrackIndex++;
+      }
+      if (_currentTrackIndex >= length) {
+        return null;
+      }
+      return _tracks[_currentTrackIndex];
     }
-    if (_currentSongIndex >= length) {
-      return null;
-    }
-    return _tracks[_currentSongIndex];
   }
 
   Track get randomSong {
@@ -41,13 +74,23 @@ class MusicData {
   }
 
   Track get prevSong {
-    if (_currentSongIndex > 0) {
-      _currentSongIndex--;
+    if (_currentAlbumIndex != -1) {
+      if (_currentAlbumTrackIndex > 0) {
+        _currentAlbumTrackIndex--;
+      }
+      if (_currentAlbumTrackIndex < 0) {
+        return null;
+      }
+      return currentAlbum.tracks[_currentAlbumTrackIndex];
+    } else {
+      if (_currentTrackIndex > 0) {
+        _currentTrackIndex--;
+      }
+      if (_currentTrackIndex < 0) {
+        return null;
+      }
+      return _tracks[_currentTrackIndex];
     }
-    if (_currentSongIndex < 0) {
-      return null;
-    }
-    return _tracks[_currentSongIndex];
   }
 
   MusicFinder get audioPlayer => musicFinder;

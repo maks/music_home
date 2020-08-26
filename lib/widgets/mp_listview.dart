@@ -13,12 +13,14 @@ class MPListView extends StatelessWidget {
   final bool albums;
   final List<Track> tracks;
 
+  bool get isAlbumTrackList => tracks != null;
+
   MPListView(this.data, this.albums, {this.tracks});
 
   @override
   Widget build(BuildContext context) {
     final List<MusicItem> items =
-        tracks != null ? tracks : (albums ? data.albums : data.songs);
+        tracks != null ? tracks : (albums ? data.albums : data.tracks);
     return ListView.builder(
       itemCount: items?.length ?? 0,
       itemBuilder: (context, int index) {
@@ -34,8 +36,8 @@ class MPListView extends StatelessWidget {
           artist: item.artist,
           color: MyApp.randomPrimaryColor(index),
           onSelected: () {
-            data.setCurrentIndex(index);
             if (albums) {
+              data.setCurrentAlbumIndex(index);
               final Album album = item as Album;
               Navigator.push<void>(
                 context,
@@ -45,6 +47,11 @@ class MPListView extends StatelessWidget {
                 ),
               );
             } else {
+              if (isAlbumTrackList) {
+                data.setCurrentAlbumTrackIndex(index);
+              } else {
+                data.setCurrentTrackIndex(index);
+              }
               final Track track = item as Track;
               Navigator.push<void>(
                 context,
