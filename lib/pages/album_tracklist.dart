@@ -15,7 +15,7 @@ class AlbumTrackList extends StatelessWidget {
       appBar: AppBar(
         title: Text(album.title),
         actions: <Widget>[
-          NowPlayingButton(),
+          //NowPlayingButton(),
         ],
       ),
       body: MPListView(data, false, tracks: album.tracks),

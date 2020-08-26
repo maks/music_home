@@ -39,8 +39,7 @@ class MPListView extends StatelessWidget {
             if (albums) {
               data.setCurrentAlbumIndex(index);
               final Album album = item as Album;
-              Navigator.push<void>(
-                context,
+              Navigator.of(context).push<void>(
                 MaterialPageRoute(
                   builder: (context) =>
                       AlbumTrackList(data: data, album: album),

@@ -1,10 +1,10 @@
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'data/song_data.dart';
 import 'pages/root_page.dart';
-import 'widgets/mp_inherited.dart';
 
 class MyApp extends StatefulWidget {
   static MaterialColor randomPrimaryColor(int index) =>
@@ -16,7 +16,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   MusicData songData;
-  bool _isLoading = true;
 
   @override
   void initState() {
@@ -38,8 +37,6 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   void initPlatformState() async {
-    _isLoading = true;
-
     List<Track> songs;
     try {
       songs = (await MusicFinder.allSongs() as List<Song>)
@@ -57,16 +54,14 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       songData = MusicData(songs, MusicFinder());
-      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MPInheritedWidget(
-      songData,
-      _isLoading,
-      RootPage(),
+    return Provider<MusicData>.value(
+      value: songData,
+      child: RootPage(),
     );
   }
 }

@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:music_home/data/song_data.dart';
 import 'package:music_home/pages/now_playing.dart';
-
-import 'mp_inherited.dart';
+import 'package:provider/provider.dart';
 
 class NowPlayingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final rootIW = MPInheritedWidget.of(context);
+    final musicData = Provider.of<MusicData>(context);
     //Goto Now Playing Page
     void goToNowPlaying(Track s, {bool nowPlayTap: false}) {
       Navigator.push(
         context,
         MaterialPageRoute<void>(
           builder: (context) => NowPlaying(
-            rootIW.songData,
+            musicData,
             s,
             nowPlayTap: nowPlayTap,
           ),
@@ -28,7 +27,7 @@ class NowPlayingButton extends StatelessWidget {
         child: InkWell(
             child: Text('Now Playing'),
             onTap: () => goToNowPlaying(
-                  rootIW.songData.currentlyPlayingTrack,
+                  musicData.currentlyPlayingTrack,
                   nowPlayTap: true,
                 )),
       ),

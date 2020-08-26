@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:music_home/widgets/now_playing_button.dart';
+import 'package:music_home/data/song_data.dart';
+import 'package:provider/provider.dart';
 
-import '../widgets/mp_inherited.dart';
 import '../widgets/mp_listview.dart';
+import '../widgets/now_playing_button.dart';
 
 class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final rootIW = MPInheritedWidget.of(context);
+    final MusicData musicData = Provider.of<MusicData>(context);
 
     //Shuffle Songs and goto now playing page
     void shuffleSongs() {
@@ -30,12 +31,12 @@ class RootPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            rootIW.isLoading
+            (musicData == null)
                 ? Center(child: CircularProgressIndicator())
-                : Scrollbar(child: MPListView(rootIW.songData, false)),
-            rootIW.isLoading
+                : Scrollbar(child: MPListView(musicData, false)),
+            musicData == null
                 ? Center(child: CircularProgressIndicator())
-                : Scrollbar(child: MPListView(rootIW.songData, true)),
+                : Scrollbar(child: MPListView(musicData, true)),
           ],
         ),
         floatingActionButton: FloatingActionButton(
