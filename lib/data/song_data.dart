@@ -2,24 +2,21 @@ import 'dart:math';
 
 import 'package:flute_music_player/flute_music_player.dart';
 
-import '../extensions.dart';
-
 class MusicData {
-  final List<Track> _songs;
+  final List<Track> _tracks;
+  final List<Album> _albums = [];
   int _currentSongIndex = -1;
   final MusicFinder musicFinder;
 
-  MusicData(this._songs, this.musicFinder);
+  MusicData(this._tracks, this.musicFinder) {
+    _mapAlbums();
+  }
 
-  List<Track> get songs => _songs;
+  List<Track> get songs => _tracks;
 
-  List<Album> get albums => _songs
-      .map(
-          (song) => Album(song.albumId, song.album, song.artist, song.albumArt))
-      .toList()
-      .distinct();
+  List<Album> get albums => _albums;
 
-  int get length => _songs.length;
+  int get length => _tracks.length;
   int get songNumber => _currentSongIndex + 1;
 
   void setCurrentIndex(int index) {
@@ -35,12 +32,12 @@ class MusicData {
     if (_currentSongIndex >= length) {
       return null;
     }
-    return _songs[_currentSongIndex];
+    return _tracks[_currentSongIndex];
   }
 
   Track get randomSong {
     final r = Random();
-    return _songs[r.nextInt(_songs.length)];
+    return _tracks[r.nextInt(_tracks.length)];
   }
 
   Track get prevSong {
@@ -50,10 +47,22 @@ class MusicData {
     if (_currentSongIndex < 0) {
       return null;
     }
-    return _songs[_currentSongIndex];
+    return _tracks[_currentSongIndex];
   }
 
   MusicFinder get audioPlayer => musicFinder;
+
+  void _mapAlbums() {
+    final Map<String, Album> albumMap = <String, Album>{};
+    for (final Track track in _tracks) {
+      albumMap.putIfAbsent(
+        track.album,
+        () => Album(track.albumId, track.album, track.artist, track.albumArt),
+      );
+      albumMap[track.album].addTrack(track);
+    }
+    _albums.addAll(albumMap.values);
+  }
 }
 
 abstract class MusicItem {
@@ -72,8 +81,17 @@ class Album implements MusicItem {
   final String artist;
   @override
   final String albumArt;
+  final List<Track> _tracks = [];
+
+  List<Track> get tracks => _tracks.toList();
 
   Album(this.id, this.title, this.artist, this.albumArt);
+
+  void addTrack(Track track) {
+    _tracks.add(track);
+    // keep tracks sorted by track number
+    _tracks.sort((a, b) => a.trackNumber.compareTo(b.trackNumber));
+  }
 
   @override
   bool operator ==(Object o) {
@@ -101,10 +119,10 @@ class Track implements MusicItem {
   final int albumId;
   final int duration;
   final String uri;
-  final int trackId;
+  final int trackNumber;
 
   Track(this.id, this.artist, this.title, this.album, this.albumId,
-      this.duration, this.uri, this.albumArt, this.trackId);
+      this.duration, this.uri, this.albumArt, this.trackNumber);
 
   factory Track.fromSong(Song s) {
     return Track(

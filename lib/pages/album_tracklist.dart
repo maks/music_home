@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_home/data/song_data.dart';
+import '../data/song_data.dart';
+import '../widgets/mp_listview.dart';
 
 class AlbumTrackList extends StatelessWidget {
   final Album album;
@@ -13,6 +14,7 @@ class AlbumTrackList extends StatelessWidget {
       appBar: AppBar(
         title: Text(album.title),
       ),
+      body: MPListView(data, false, tracks: album.tracks),
     );
   }
 }

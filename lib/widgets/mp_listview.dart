@@ -11,12 +11,14 @@ import '../pages/now_playing.dart';
 class MPListView extends StatelessWidget {
   final MusicData data;
   final bool albums;
+  final List<Track> tracks;
 
-  MPListView(this.data, this.albums);
+  MPListView(this.data, this.albums, {this.tracks});
 
   @override
   Widget build(BuildContext context) {
-    final List<MusicItem> items = albums ? data.albums : data.songs;
+    final List<MusicItem> items =
+        tracks != null ? tracks : (albums ? data.albums : data.songs);
     return ListView.builder(
       itemCount: items?.length ?? 0,
       itemBuilder: (context, int index) {
