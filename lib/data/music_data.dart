@@ -1,17 +1,21 @@
 import 'dart:math';
 
 import 'package:flute_music_player/flute_music_player.dart';
+import 'package:flutter/foundation.dart';
 
-class MusicData {
-  final List<Track> _tracks;
+class MusicData extends ChangeNotifier {
+  List<Track> _tracks;
   final List<Album> _albums = [];
   int _currentTrackIndex = -1;
   int _currentAlbumIndex = -1;
   int _currentAlbumTrackIndex = 0;
   final MusicFinder musicFinder;
 
-  MusicData(this._tracks, this.musicFinder) {
-    _mapAlbums();
+  MusicData(this.musicFinder) {
+    _getAllTracks().then((value) {
+      _mapAlbums();
+      notifyListeners();
+    });
   }
 
   List<Track> get tracks => _tracks;
@@ -105,6 +109,19 @@ class MusicData {
       albumMap[track.album].addTrack(track);
     }
     _albums.addAll(albumMap.values);
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> _getAllTracks() async {
+    List<Track> songs;
+    try {
+      songs = (await MusicFinder.allSongs() as List<Song>)
+          .map((s) => Track.fromSong(s))
+          .toList();
+    } catch (e) {
+      print("Failed to get songs: '$e'.");
+    }
+    _tracks = songs;
   }
 }
 

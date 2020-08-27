@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:music_home/pages/album_tracklist.dart';
-import 'package:music_home/widgets/song_list_tile.dart';
+import 'package:music_home/widgets/track_list_tile.dart';
 
-import '../data/song_data.dart';
+import '../data/music_data.dart';
 import '../my_app.dart';
 import '../pages/now_playing.dart';
 

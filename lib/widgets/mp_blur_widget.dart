@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:music_home/data/song_data.dart';
+import 'package:music_home/data/music_data.dart';
 
 Widget blurWidget(Track track) {
   final f =

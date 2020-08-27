@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 
-import '../data/song_data.dart';
+import '../data/music_data.dart';
 import '../widgets/mp_album_ui.dart';
 import '../widgets/mp_blur_filter.dart';
 import '../widgets/mp_blur_widget.dart';
