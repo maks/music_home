@@ -1,26 +1,26 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:music_home/pages/album_tracklist.dart';
-import 'package:music_home/widgets/track_list_tile.dart';
 
 import '../data/music_data.dart';
 import '../my_app.dart';
-import '../pages/now_playing.dart';
+import 'navigation_routes.dart';
+import 'track_list_tile.dart';
 
-class MPListView extends StatelessWidget {
-  final MusicData data;
+class MPListView extends StatelessWidget with NavigatationRoutes {
+  final MusicData musicData;
   final bool albums;
   final List<Track> tracks;
 
   bool get isAlbumTrackList => tracks != null;
 
-  MPListView(this.data, this.albums, {this.tracks});
+  MPListView(this.musicData, this.albums, {this.tracks});
 
   @override
   Widget build(BuildContext context) {
-    final List<MusicItem> items =
-        tracks != null ? tracks : (albums ? data.albums : data.tracks);
+    final List<MusicItem> items = tracks != null
+        ? tracks
+        : (albums ? musicData.albums : musicData.tracks);
     return ListView.builder(
       itemCount: items?.length ?? 0,
       itemBuilder: (context, int index) {
@@ -37,27 +37,17 @@ class MPListView extends StatelessWidget {
           color: MyApp.randomPrimaryColor(index),
           onSelected: () {
             if (albums) {
-              data.setCurrentAlbumIndex(index);
+              musicData.setCurrentAlbumIndex(index);
               final Album album = item as Album;
-              Navigator.of(context).push<void>(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AlbumTrackList(data: data, album: album),
-                ),
-              );
+              gotoAlbumTrackList(context, musicData, album);
             } else {
               if (isAlbumTrackList) {
-                data.setCurrentAlbumTrackIndex(index);
+                musicData.setCurrentAlbumTrackIndex(index);
               } else {
-                data.setCurrentTrackIndex(index);
+                musicData.setCurrentTrackIndex(index);
               }
               final Track track = item as Track;
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NowPlaying(data, track),
-                ),
-              );
+              goToNowPlaying(context, musicData, track);
             }
           },
         );
