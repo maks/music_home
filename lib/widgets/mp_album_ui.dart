@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../data/music_data.dart';
 
 class AlbumUI extends StatefulWidget {
-  final Track song;
+  final Track track;
   final Duration position;
   final Duration duration;
-  AlbumUI(this.song, this.duration, this.position);
+  AlbumUI(this.track, this.duration, this.position);
   @override
   AlbumUIState createState() {
     return AlbumUIState();
@@ -36,12 +36,12 @@ class AlbumUIState extends State<AlbumUI> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final f = widget.song.albumArt == null
+    final f = widget.track.albumArt == null
         ? null
-        : File.fromUri(Uri.parse(widget.song.albumArt));
+        : File.fromUri(Uri.parse(widget.track.albumArt));
 
     final myHero = Hero(
-      tag: widget.song.title,
+      tag: widget.track.title,
       child: Material(
           borderRadius: BorderRadius.circular(5.0),
           elevation: 5.0,

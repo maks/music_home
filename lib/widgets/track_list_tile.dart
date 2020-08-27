@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'mp_circle_avatar.dart';
 
-class SongListTile extends StatelessWidget {
+class TrackListTile extends StatelessWidget {
   final String title;
   final String artist;
   final File artFile;
   final MaterialColor color;
   final void Function() onSelected;
 
-  SongListTile({
+  TrackListTile({
     @required this.title,
     @required this.artist,
     @required this.artFile,

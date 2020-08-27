@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MusicData songData;
+  MusicData musicData;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    songData.audioPlayer.stop();
+    musicData.audioPlayer.stop();
   }
 
   @override

@@ -30,7 +30,7 @@ class MPListView extends StatelessWidget with NavigatationRoutes {
             ? null
             : File.fromUri(Uri.parse(item.albumArt));
 
-        return SongListTile(
+        return TrackListTile(
           artFile: artFile,
           title: item.title,
           artist: item.artist,

@@ -6,14 +6,14 @@ import '../pages/now_playing.dart';
 
 mixin NavigatationRoutes on StatelessWidget {
   //Goto Now Playing Page
-  void goToNowPlaying(BuildContext context, MusicData musicData, Track s,
+  void goToNowPlaying(BuildContext context, MusicData musicData, Track track,
       {bool nowPlayTap: false}) {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
         builder: (context) => NowPlaying(
           musicData,
-          s,
+          track,
           nowPlayTap: nowPlayTap,
         ),
       ),

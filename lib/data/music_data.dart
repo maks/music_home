@@ -23,7 +23,7 @@ class MusicData extends ChangeNotifier {
   List<Album> get albums => _albums;
 
   int get length => _tracks.length;
-  int get songNumber => _currentTrackIndex + 1;
+  int get trackNumber => _currentTrackIndex + 1;
 
   Album get currentAlbum => _albums[_currentAlbumIndex];
 
@@ -52,7 +52,7 @@ class MusicData extends ChangeNotifier {
 
   int get currentIndex => _currentTrackIndex;
 
-  Track get nextSong {
+  Track get nextTrack {
     if (_currentAlbumIndex != -1) {
       if (_currentAlbumTrackIndex < currentAlbum.tracks.length) {
         _currentAlbumTrackIndex++;
@@ -72,12 +72,12 @@ class MusicData extends ChangeNotifier {
     }
   }
 
-  Track get randomSong {
+  Track get randomTrack {
     final r = Random();
     return _tracks[r.nextInt(_tracks.length)];
   }
 
-  Track get prevSong {
+  Track get prevTrack {
     if (_currentAlbumIndex != -1) {
       if (_currentAlbumTrackIndex > 0) {
         _currentAlbumTrackIndex--;
