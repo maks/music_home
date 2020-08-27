@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 
-import '../data/song_data.dart';
+import '../data/music_data.dart';
 import '../widgets/mp_album_ui.dart';
 import '../widgets/mp_blur_filter.dart';
 import '../widgets/mp_blur_widget.dart';
@@ -12,10 +12,10 @@ import '../widgets/mp_control_button.dart';
 enum PlayerState { stopped, playing, paused }
 
 class NowPlaying extends StatefulWidget {
-  final Song _song;
-  final SongData songData;
+  final Track _track;
+  final MusicData musicData;
   final bool nowPlayTap;
-  NowPlaying(this.songData, this._song, {this.nowPlayTap});
+  NowPlaying(this.musicData, this._track, {this.nowPlayTap});
 
   @override
   _NowPlayingState createState() => _NowPlayingState();
@@ -26,7 +26,7 @@ class _NowPlayingState extends State<NowPlaying> {
   Duration duration;
   Duration position;
   PlayerState playerState;
-  Song song;
+  Track track;
 
   bool get isPlaying => playerState == PlayerState.playing;
   bool get isPaused => playerState == PlayerState.paused;
@@ -59,21 +59,21 @@ class _NowPlayingState extends State<NowPlaying> {
 
   void onComplete() {
     setState(() => playerState = PlayerState.stopped);
-    play(widget.songData.nextSong);
+    play(widget.musicData.nextTrack);
   }
 
   void initPlayer() async {
     if (audioPlayer == null) {
-      audioPlayer = widget.songData.audioPlayer;
+      audioPlayer = widget.musicData.audioPlayer;
     }
     setState(() {
-      song = widget._song;
+      track = widget._track;
       if (widget.nowPlayTap == null || widget.nowPlayTap == false) {
         if (playerState != PlayerState.stopped) {
           stop();
         }
       }
-      play(song);
+      play(track);
     });
 
     audioPlayer.setDurationHandler((d) => setState(() {
@@ -100,13 +100,13 @@ class _NowPlayingState extends State<NowPlaying> {
     });
   }
 
-  Future play(Song s) async {
+  Future play(Track s) async {
     if (s != null) {
       final int result = await audioPlayer.play(s.uri, isLocal: true) as int;
       if (result == 1) {
         setState(() {
           playerState = PlayerState.playing;
-          song = s;
+          track = s;
         });
       }
     }
@@ -129,16 +129,16 @@ class _NowPlayingState extends State<NowPlaying> {
     }
   }
 
-  Future next(SongData s) async {
+  Future next(MusicData s) async {
     stop();
     setState(() {
-      play(s.nextSong);
+      play(s.nextTrack);
     });
   }
 
-  Future prev(SongData s) async {
+  Future prev(MusicData s) async {
     stop();
-    play(s.prevSong);
+    play(s.prevTrack);
   }
 
   Future mute(bool muted) async {
@@ -160,12 +160,12 @@ class _NowPlayingState extends State<NowPlaying> {
           Column(
             children: <Widget>[
               Text(
-                song.title,
+                track.title,
                 style: Theme.of(context).textTheme.headline6,
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                song.artist,
+                track.artist,
                 style: Theme.of(context).textTheme.caption,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -175,10 +175,10 @@ class _NowPlayingState extends State<NowPlaying> {
             ],
           ),
           Row(mainAxisSize: MainAxisSize.min, children: [
-            ControlButton(Icons.skip_previous, () => prev(widget.songData)),
+            ControlButton(Icons.skip_previous, () => prev(widget.musicData)),
             ControlButton(isPlaying ? Icons.pause : Icons.play_arrow,
-                isPlaying ? () => pause() : () => play(widget._song)),
-            ControlButton(Icons.skip_next, () => next(widget.songData)),
+                isPlaying ? () => pause() : () => play(widget._track)),
+            ControlButton(Icons.skip_next, () => next(widget.musicData)),
           ]),
           duration == null
               ? Container()
@@ -222,7 +222,7 @@ class _NowPlayingState extends State<NowPlaying> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          AlbumUI(song, duration, position),
+          AlbumUI(track, duration, position),
           Material(
             child: _buildPlayer(),
             color: Colors.transparent,
@@ -239,7 +239,7 @@ class _NowPlayingState extends State<NowPlaying> {
         color: Theme.of(context).backgroundColor,
         child: Stack(
           fit: StackFit.expand,
-          children: <Widget>[blurWidget(song), blurFilter(), playerUI],
+          children: <Widget>[blurWidget(track), blurFilter(), playerUI],
         ),
       ),
     );
